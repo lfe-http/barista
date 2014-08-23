@@ -4,7 +4,15 @@
 
 ## Introduction
 
-Add content to me here!
+Barista is a stand-alone, simple HTTP server written in LFE for development
+and demo purposes only. It was the first server written against the nascent
+[lmug Spec](https://github.com/lfex/lmug/blob/master/doc/SPEC.md).
+
+If you would like to use a production-ready HTTP server with lmud middleware,
+be sure to check out the other options:
+
+* [lmud-yaws](https://github.com/lfex/lmug-yaws)
+* [lmud-cowboy](https://github.com/lfex/lmug-cowboy)
 
 
 ## Installation
