@@ -13,8 +13,8 @@ and demo purposes only. It was the first server written against the nascent
 If you would like to use a production-ready HTTP server with lmug middleware,
 be sure to check out the other options:
 
-* [lmug-yaws](https://github.com/lfex/lmug-yaws)
-* [lmug-cowboy](https://github.com/lfex/lmug-cowboy)
+* [lmug-yaws](https://github.com/lfex/lmug-yaws) (in development)
+* [lmug-cowboy](https://github.com/lfex/lmug-cowboy) (in development)
 
 
 ## Installation
