@@ -12,21 +12,19 @@ Add content to me here!
 
 Just add it to your ``rebar.config`` deps:
 
-.. code:: erlang
-
+```erlang
     {deps, [
         ...
         {barista, ".*", {git, "git@github.com:lfex/barista.git", "master"}}
       ]}.
-
+```
 
 And then do the usual:
 
-.. code:: bash
-
+```bash
     $ rebar get-deps
     $ rebar compile
-
+```
 
 ## Usage
 
