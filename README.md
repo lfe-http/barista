@@ -4,6 +4,7 @@
 
 <img src="resources/images/barista.png" />
 
+
 ## Introduction
 
 Barista is a stand-alone, simple HTTP server written in LFE for development
@@ -18,7 +19,6 @@ be sure to check out the other options:
 
 
 ## Installation
-
 
 Just add it to your ``rebar.config`` deps:
 
@@ -36,6 +36,22 @@ And then do the usual:
     $ rebar compile
 ```
 
+
 ## Usage
 
-Add content to me here!
+```cl
+(defmodule hello-world
+  (import
+    (from barista (run-barista 2)))
+  (export all))
+
+(include-file "deps/lmug/include/response.lfe")
+
+(defun handler (request)
+  (make-response
+    status 200
+    headers (#("Content-Type" "text/plain"))
+    body "Hello World"))
+
+(run-barista #'handler/1 `(#(port 1206)))
+```
