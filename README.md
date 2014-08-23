@@ -2,6 +2,8 @@
 
 *Barista serves up hot lmugs of LFE for your simple LFE-native HTTP needs.*
 
+<img src="resources/images/barista.png" />
+
 ## Introduction
 
 Barista is a stand-alone, simple HTTP server written in LFE for development
