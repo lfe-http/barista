@@ -18,6 +18,9 @@
                    (barista-options:index-file))
     (index-html)))
 
+(defun run-barista (handler)
+  (run-barista handler '()))
+
 (defun run-barista (handler options)
   (inets:start)
   (setup)
