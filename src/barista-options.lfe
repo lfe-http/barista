@@ -14,6 +14,7 @@
 (defun base-dir () '"./")
 (defun log-dir () '"log")
 (defun http-dir () '"www")
+(defun index-file () '"index.html")
 
 (defun get-defaults ()
   (orddict:from_list
@@ -21,10 +22,10 @@
       #(port 1206)
       #(server-name "barista_dev")
       #(server-root ,(base-dir))
-      #(error-log ,(++ (log-dir) "/errors.log"))
-      #(access-log ,(++ (log-dir) "/access.log"))
+      #(error-log ,(filename:join (log-dir) "errors.log"))
+      #(access-log ,(filename:join (log-dir) "access.log"))
       #(docroot ,(http-dir))
-      #(index-files ("index.html", "index.htm"))
+      #(index-files (,(index-file) "index.htm"))
       #(ipfamily inet))))
 
 (defun add-defaults (options)

@@ -6,8 +6,17 @@
       (host->tuple 1)))
   (export all))
 
+(defun index-html ()
+  (++ "<html><head><title>Wow!</title></head>"
+      "<body><p>Wassup?</p></body></html>"))
+
 (defun setup ()
-  )
+  (lutil-file:mkdirs (barista-options:log-dir))
+  (lutil-file:mkdirs (barista-options:http-dir))
+  (file:write_file
+    (filename:join (barista-options:http-dir)
+                   (barista-options:index-file))
+    (index-html)))
 
 (defun run-barista (handler options)
   (inets:start)
