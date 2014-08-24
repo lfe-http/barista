@@ -11,10 +11,13 @@
   (inets:start 'httpd
     (barista-options:fixup options)))
 
-(defun stop-barista (options)
-  (stop-barista
-    (get_value 'host options)
-    (get_value 'port options)))
+(defun stop-barista
+  ((pid) (when (is_pid pid))
+   (inets:stop 'httpd pid))
+  ((options)
+    (stop-barista
+      (get_value 'host options)
+      (get_value 'port options))))
 
 (defun stop-barista
   (('pid pid)
