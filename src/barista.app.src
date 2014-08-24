@@ -1,9 +1,8 @@
 %% -*- erlang -*-
-{application, 'barista',
+{application, barista,
  [
   %% A quick description of the application.
-  {description, "Barista serves up hot lmugs of LFE for your simple "
-                ++ "HTTP needs,"},
+  {description, "Hot lmugs of LFE for your simple HTTP needs."},
 
   %% The version of the application
   {vsn, "0.0.1"},
