@@ -6,8 +6,12 @@
       (host->tuple 1)))
   (export all))
 
+(defun setup ()
+  )
+
 (defun run-barista (handler options)
   (inets:start)
+  (setup)
   (inets:start 'httpd
     (barista-options:fixup options)))
 

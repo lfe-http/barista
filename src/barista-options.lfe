@@ -11,15 +11,19 @@
 
 (include-lib "lutil/include/compose-macros.lfe")
 
+(defun base-dir () '"./")
+(defun log-dir () '"log")
+(defun http-dir () '"www")
+
 (defun get-defaults ()
   (orddict:from_list
     `(#(host "localhost")
       #(port 1206)
       #(server-name "barista_dev")
-      #(server-root "./")
-      #(error-log "log/errors.log")
-      #(access-log "log/access.log")
-      #(docroot "www")
+      #(server-root ,(base-dir))
+      #(error-log ,(++ (log-dir) "/errors.log"))
+      #(access-log ,(++ (log-dir) "/access.log"))
+      #(docroot ,(http-dir))
       #(index-files ("index.html", "index.htm"))
       #(ipfamily inet))))
 
