@@ -39,19 +39,36 @@ And then do the usual:
 
 ## Usage
 
-```cl
-(defmodule hello-world
-  (import
-    (from barista (run-barista 2)))
-  (export all))
+NOTE: the code in this section doesn't work yet! One of the first goals is to
+get to this point :-)
 
-(include-file "deps/lmug/include/response.lfe")
+The best way to demonstrate barista is in conjunction with lmud:
 
-(defun handler (request)
-  (make-response
-    status 200
-    headers (#("Content-Type" "text/plain"))
-    body "Hello World"))
-
-(run-barista #'handler/1 `(#(port 1206)))
+```bash
+$ git clone https://github.com/lfex/lmug.git
+$ cd lmud
+$ make repl
 ```
+
+Then, from the LFE REPL:
+
+```cl
+> (slurp "src/lmug.lfe")
+#(ok lmug)
+> (defun handler (request)
+    (make-response
+      status 200
+      headers (#("Content-Type" "text/plain"))
+      body "Hello World"))
+
+> (set `#(ok ,pid) (barista:run-barista #'handler/1))
+#(ok <0.46.0>)
+```
+
+Or, if you want to run on a non-default port (something other than 1206):
+
+```cl
+(barista:run-barista #'handler/1 '(#(port 8000)))
+#(ok <0.54.0>)
+```
+
