@@ -7,9 +7,16 @@
 
 ## Introduction
 
-Barista is a stand-alone, simple HTTP server written in LFE for development
-and demo purposes only. It was the first server written against the nascent
-[lmug Spec](https://github.com/lfex/lmug/blob/master/doc/SPEC.md).
+Barista is a stand-alone, simple HTTP server. Or more accurately, barista
+is LFE code that wraps the Erlang/OTP ``httpd`` HTTP server. It is intended
+for a couple of simple uses:
+
+* development and demo purposes
+* quickly and easily testing of lmug middleware
+
+This is the first HTTP server which supports the
+[lmug Spec](https://github.com/lfex/lmug/blob/master/doc/SPEC.md) for creating
+HTTP middleware (and lmug-compliant HTTP servers) in Erlang/LFE.
 
 If you would like to use a production-ready HTTP server with lmug middleware,
 be sure to check out the other options:
