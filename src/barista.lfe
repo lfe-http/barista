@@ -10,33 +10,9 @@
 
 (defun lmug-handler-name () 'lmug-handler)
 
-;; (defun index-html ()
-;;   (++ "<html><head><title>Wow!</title></head>"
-;;       "<body><p>Wassup?</p></body></html>"))
-
-;; (defun get-index-filename ()
-;;   (filename:join (barista-options:http-dir)
-;;                  (barista-options:index-file)))
-
-;; (defun create-index-file ()
-;;   (let ((result (file:write_file
-;;                   (get-index-filename)
-;;                   (index-html))))
-;;     (case result
-;;       ('ok
-;;         '#(ok created-index))
-;;       (_
-;;         result))))
-
 (defun setup ()
   (lutil-file:mkdirs (barista-options:log-dir))
-  (lutil-file:mkdirs (barista-options:http-dir))
-  ;; (case (filelib:is_file (get-index-filename))
-  ;;   ('false
-  ;;     (create-index-file))
-  ;;   ('true
-  ;;     '#(ok index-already-exists)))
-  )
+  (lutil-file:mkdirs (barista-options:http-dir)))
 
 (defun run-barista (handler)
   (run-barista handler '()))

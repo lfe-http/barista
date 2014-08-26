@@ -25,11 +25,7 @@
       #(error-log ,(filename:join (log-dir) "errors.log"))
       #(access-log ,(filename:join (log-dir) "access.log"))
       #(docroot ,(http-dir))
-      ;; #(index-files (,(index-file) "index.htm"))
       #(ipfamily inet)
-      ;; For the following, the expected URL would be of this form:
-      ;;   http://host:port/lmug/barista/dispatch/...
-      ;; #(appmod #("/lmug" (barista)))
       ;; #(nocache true)
       ;; #(modules (mod_alias mod_auth mod_esi mod_actions mod_cgi mod_dir
       ;;            mod_get mod_head mod_log mod_disk_log))
