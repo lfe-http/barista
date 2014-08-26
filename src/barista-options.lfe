@@ -25,8 +25,16 @@
       #(error-log ,(filename:join (log-dir) "errors.log"))
       #(access-log ,(filename:join (log-dir) "access.log"))
       #(docroot ,(http-dir))
-      #(index-files (,(index-file) "index.htm"))
-      #(ipfamily inet))))
+      ;; #(index-files (,(index-file) "index.htm"))
+      #(ipfamily inet)
+      ;; For the following, the expected URL would be of this form:
+      ;;   http://host:port/lmug/barista/dispatch/...
+      ;; #(appmod #("/lmug" (barista)))
+      ;; #(nocache true)
+      ;; #(modules (mod_alias mod_auth mod_esi mod_actions mod_cgi mod_dir
+      ;;            mod_get mod_head mod_log mod_disk_log))
+      #(modules (mod_log mod_disk_log barista))
+      )))
 
 (defun add-defaults (options)
   (merge (get-defaults)
@@ -44,7 +52,7 @@
   val2)
 
 (defun fixup (options)
-  "Let's rename the lmud-standard keys to ones that the OTP httpd module
+  "Let's rename the lmug-standard keys to ones that the OTP httpd module
   expects to see."
   (->> (orddict:from_list options)
        (add-defaults)
@@ -54,4 +62,6 @@
        (rename-key 'server-name 'server_name)
        (rename-key 'server-root 'server_root)
        (rename-key 'access-log 'transfer_log)
-       (rename-key 'error-log 'error_log)))
+       (rename-key 'error-log 'error_log)
+       (rename-key 'appmod 'erl_script_alias)
+       (rename-key 'nocache 'erl_script_nocache)))

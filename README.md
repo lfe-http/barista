@@ -39,36 +39,71 @@ And then do the usual:
 
 ## Usage
 
-NOTE: the code in this section doesn't work yet! One of the first goals is to
-get to this point :-)
+NOTE: barista by itself isn't very compelling; it's just a convenient LFE
+wrapper around Erlang/OTP's ``httpd``. It's much more meaningful when used
+as part of lmug.
 
-The best way to demonstrate barista is in conjunction with lmud:
+As such, keep in mind that the following usage is "toy"; see the
+[lmug](https://github.com/lfex/lmug) project for more interesting use cases.
 
 ```bash
-$ git clone https://github.com/lfex/lmug.git
-$ cd lmud
 $ make repl
 ```
 
 Then, from the LFE REPL:
 
 ```cl
-> (slurp "src/lmug.lfe")
-#(ok lmug)
-> (defun handler (request)
-    (make-response
-      status 200
-      headers (#("Content-Type" "text/plain"))
-      body "Hello World"))
-
+> (defun handler (request) '"Wassup?")
+handler
 > (set `#(ok ,pid) (barista:run-barista #'handler/1))
 #(ok <0.46.0>)
 ```
 
-Or, if you want to run on a non-default port (something other than 1206):
+Or, if you want to run on a non-default port (something other than 1206), you
+can do this instead:
 
 ```cl
 (barista:run-barista #'handler/1 '(#(port 8000)))
-#(ok <0.54.0>)
+#(ok <0.46.0>)
 ```
 
+Then, make a request:
+
+```bash
+$ curl -D- -X GET http://localhost:1206/
+HTTP/1.1 200 OK
+Server: inets/5.10
+Content-Type: text/html
+Date: Tue, 26 Aug 2014 04:02:57 GMT
+Content-Length: 9
+
+"Wassup?"
+```
+
+Instead of replacing the request data with a string, let's pass the data:
+
+```cl
+> (barista:stop-barista pid)
+ok
+> (defun handler (request) request)
+handler
+> (set `#(ok ,pid) (barista:run-barista #'handler/1))
+#(ok <0.56.0>)
+```
+
+Let's try this one out:
+
+```bash
+$ curl -D- -X PUT http://localhost:1206/a/b/c
+HTTP/1.1 200 OK
+Server: inets/5.10
+Content-Type: text/html
+Date: Tue, 26 Aug 2014 03:59:47 GMT
+Content-Length: 277
+
+{mod,{init_data,{51709,"127.0.0.1"},"korax-4"},
+     [],ip_comm,#Port<0.3331>,httpd_conf__127_0_0_1__1206,"PUT",
+     "localhost:1206/a/b/c","/a/b/c","HTTP/1.1","PUT /a/b/c HTTP/1.1",
+     [{"accept","*/*"},{"host","localhost:1206"},{"user-agent","curl/7.30.0"}],
+     [],true}
+```
