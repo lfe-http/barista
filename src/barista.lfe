@@ -61,18 +61,12 @@
      Erlang/OTP httpd
   "
   (let ((handler-pid (whereis (lmug-handler-name))))
-    (! handler-pid
-       (tuple (self)
-              (barista-util:httpd->lmug-response httpd-mod-data)))
+    (! handler-pid (tuple (self) httpd-mod-data))
     (receive
       ((tuple 'handler-output data)
         `#(proceed
-          ;; XXX update this to use middleware for generating the response
-          ;; data
           (#(response
-             #(200 ,(io_lib:format
-                      "~p"
-                      (list (barista-util:lmug->httpd-response data)))))))))))
+             #(200 ,(io_lib:format "~p" (list data))))))))))
 
 (defun stop-barista
   ((pid) (when (is_pid pid))
