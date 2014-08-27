@@ -6,8 +6,6 @@
       (host->tuple 1)))
   (export all))
 
-(include-lib "inets/include/httpd.hrl")
-
 (defun lmug-handler-name () 'lmug-handler)
 
 (defun setup ()
