@@ -46,6 +46,10 @@
   for each of the registered modules. In order for this to work, the barista
   HTTP server needs to be configured with #(modules (... barista)) at the end.
 
+  Note that, in order to call the handler here, we need to set up a 'handler
+  server' when we call the 'run' function. This will allow us to call the
+  configured handler later (i.e., here in the 'do' function).
+
   This function does the following, when it is called (on each HTTH request):
 
    * looks up the PID for the handler loop
