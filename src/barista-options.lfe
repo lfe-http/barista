@@ -3,9 +3,7 @@
     (from proplists
       (delete 2)
       (get_value 2))
-    (from lmug
-      (add-default 3)
-      (host->tuple 1)
+    (from lutil-type
       (rename-key 3)))
   (export all))
 
