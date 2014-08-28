@@ -31,19 +31,8 @@
       )))
 
 (defun add-defaults (options)
-  (merge (get-defaults)
-         options))
-
-(defun merge (options1 options2)
-  "That which is added latter will over-write what was previous. As such,
-  options2 has presedence over options1."
-  (orddict:merge
-    #'second-wins/3
-    options1
-    options2))
-
-(defun second-wins (key val1 val2)
-  val2)
+  (lutil-type:orddict-merge (get-defaults)
+                            options))
 
 (defun fixup (options)
   "Let's rename the lmug-standard keys to ones that the OTP httpd module
