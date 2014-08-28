@@ -1,12 +1,12 @@
 (defmodule unit-barista-tests
-  (behaviour lunit-unit)
+  (behaviour ltest-unit)
   (export all)
   (import
-    (from lunit
+    (from ltest
       (check-failed-assert 2)
       (check-wrong-assert-exception 2))))
 
-(include-lib "deps/lunit/include/lunit-macros.lfe")
+(include-lib "deps/ltest/include/macros.lfe")
 
 (deftest code-change
   (is-equal
