@@ -35,7 +35,9 @@
   "This function is called when a barista server is started. It then listens
   for data messages. When received, calls the handler function (passed when
   the barista server was started) and sends the results of that call to the
-  function that called the loop (usually the do/1 function)."
+  function that called the loop (e.g., the do/1 function for barista/httpd,
+  and the out/1 function for YAWS)."
+  (io:format "Starting handler loop ...~n")
   (receive
     ((tuple sender-pid data)
       (! sender-pid `#(handler-output ,(funcall handler-fn data)))
