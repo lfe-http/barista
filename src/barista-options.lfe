@@ -7,7 +7,7 @@
       (rename-key 3)))
   (export all))
 
-(include-lib "lutil/include/compose-macros.lfe")
+(include-lib "lutil/include/compose.lfe")
 
 (defun base-dir () '"./")
 (defun log-dir () '"log")
