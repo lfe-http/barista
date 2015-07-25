@@ -52,7 +52,7 @@
   server' when we call the 'run' function. This will allow us to call the
   configured handler later (i.e., here in the 'do' function).
 
-  This function does the following, when it is called (on each HTTH request):
+  This function does the following, when it is called (on each HTTP request):
 
    * looks up the PID for the handler loop
    * calls the middleware function that converts the Erlang/OTP httpd arg data
@@ -70,7 +70,12 @@
       ((tuple 'handler-output data)
         `#(proceed
           (#(response
-             #(200 ,(io_lib:format "~p" (list data))))))))))
+             #(200 ,(io_lib:format "~p" (list data)))))))
+      ((tuple 'error 'enoent)
+       `#(proceed
+          (#(response
+             #(404 "Not Found")))))
+      (x (io:format "Unexpected result: ~p~n" `(,x))))))
 
 (defun stop-barista
   ((pid) (when (is_pid pid))

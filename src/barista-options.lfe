@@ -9,23 +9,41 @@
 
 (include-lib "clj/include/compose.lfe")
 
+(defun get-cwd ()
+  (case (file:get_cwd)
+    (`#(ok ,dir) dir)
+    (x x)))
+
+(defun basedir ()
+  (let ((basedir (lcfg:get-in '(barista httpd-conf server-root))))
+    (case (car basedir)
+      (#\/ basedir)
+      (_ (filename:join (get-cwd) basedir)))))
+
+(defun docroot ()
+  (let ((docroot (lcfg:get-in '(barista httpd-conf docroot))))
+    (case (car docroot)
+      (#\/ docroot)
+      (_ (filename:join (get-cwd) docroot)))))
+
+(defun log-dir ()
+  (filename:join (basedir)
+                 (lcfg:get-in '(barista httpd-conf log-dir))))
+
 (defun get-defaults ()
   (orddict:from_list
     `(#(host ,(lcfg:get-in '(barista httpd-conf host)))
       #(port ,(lcfg:get-in '(barista httpd-conf post)))
       #(server-name ,(lcfg:get-in '(barista httpd-conf server-name)))
-      #(server-root ,(lcfg:get-in '(barista httpd-conf server-root)))
-      #(error-log ,(filename:join (lcfg:get-in '(barista httpd-conf log-dir))
+      #(server-root ,(basedir))
+      #(error-log ,(filename:join (log-dir)
                                   (lcfg:get-in '(barista httpd-conf error-log))))
-      #(access-log ,(filename:join (lcfg:get-in '(barista httpd-conf log-dir))
+      #(access-log ,(filename:join (log-dir)
                                    (lcfg:get-in '(barista httpd-conf access-log))))
-      #(docroot ,(lcfg:get-in '(barista httpd-conf docroot)))
+      #(docroot ,(docroot))
       #(ipfamily inet)
-      ;; #(nocache true)
-      ;; #(modules (mod_alias mod_auth mod_esi mod_actions mod_cgi mod_dir
-      ;;            mod_get mod_head mod_log mod_disk_log))
-      #(modules (mod_log mod_disk_log barista))
-      )))
+      #(modules (mod_alias mod_auth mod_actions mod_dir
+                 mod_get mod_head mod_log mod_disk_log barista)))))
 
 (defun add-defaults (options)
   (lutil-type:orddict-merge (get-defaults)
