@@ -60,7 +60,7 @@ $ make repl
 Then, from the LFE REPL:
 
 ```cl
-> (defun handler (request) '"Wassup?")
+> (defun handler (request) "Wassup?")
 handler
 > (set `#(ok ,pid) (barista:run-barista #'handler/1))
 #(ok <0.46.0>)
