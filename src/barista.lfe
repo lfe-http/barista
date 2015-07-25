@@ -9,8 +9,8 @@
 (defun lmug-handler-name () 'lmug-handler)
 
 (defun setup ()
-  (lutil-file:mkdirs (barista-options:log-dir))
-  (lutil-file:mkdirs (barista-options:http-dir)))
+  (lutil-file:mkdirs (lcfg:get-in '(barista httpd-conf log-dir)))
+  (lutil-file:mkdirs (lcfg:get-in '(barista httpd-conf docroot))))
 
 (defun run-barista (handler)
   (run-barista handler '()))

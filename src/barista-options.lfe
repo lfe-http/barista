@@ -7,22 +7,19 @@
       (rename-key 3)))
   (export all))
 
-(include-lib "lutil/include/compose.lfe")
-
-(defun base-dir () '"./")
-(defun log-dir () '"log")
-(defun http-dir () '"www")
-(defun index-file () '"index.html")
+(include-lib "clj/include/compose.lfe")
 
 (defun get-defaults ()
   (orddict:from_list
-    `(#(host "localhost")
-      #(port 1206)
-      #(server-name "barista_dev")
-      #(server-root ,(base-dir))
-      #(error-log ,(filename:join (log-dir) "errors.log"))
-      #(access-log ,(filename:join (log-dir) "access.log"))
-      #(docroot ,(http-dir))
+    `(#(host ,(lcfg:get-in '(barista httpd-conf host)))
+      #(port ,(lcfg:get-in '(barista httpd-conf post)))
+      #(server-name ,(lcfg:get-in '(barista httpd-conf server-name)))
+      #(server-root ,(lcfg:get-in '(barista httpd-conf server-root)))
+      #(error-log ,(filename:join (lcfg:get-in '(barista httpd-conf log-dir))
+                                  (lcfg:get-in '(barista httpd-conf error-log))))
+      #(access-log ,(filename:join (lcfg:get-in '(barista httpd-conf log-dir))
+                                   (lcfg:get-in '(barista httpd-conf access-log))))
+      #(docroot ,(lcfg:get-in '(barista httpd-conf docroot)))
       #(ipfamily inet)
       ;; #(nocache true)
       ;; #(modules (mod_alias mod_auth mod_esi mod_actions mod_cgi mod_dir
