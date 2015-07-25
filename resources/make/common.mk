@@ -37,7 +37,7 @@ get-version:
 	@PATH=$(SCRIPT_PATH) $(LFETOOL) info version
 	@echo "Erlang/OTP, LFE, & library versions:"
 	@ERL_LIBS=$(ERL_LIBS) PATH=$(SCRIPT_PATH) erl \
-	-eval "lfe_io:format(\"~p~n\",['laotzi-demo-util':'get-versions'()])." \
+	-eval "lfe_io:format(\"~p~n\",['$(PROJECT)':'get-versions'()])." \
 	-noshell -s erlang halt
 
 get-deps:
@@ -70,12 +70,12 @@ compile-tests: clean-eunit
 repl: compile
 	@which clear >/dev/null 2>&1 && clear || printf "\033c"
 	@echo "Starting an LFE REPL ..."
-	@PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) $(LFETOOL) repl lfe +pc unicode -s laotzi-demo
+	@PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) $(LFETOOL) repl lfe +pc unicode
 
 repl-no-deps: compile-no-deps
 	@which clear >/dev/null 2>&1 && clear || printf "\033c"
 	@echo "Starting an LFE REPL ..."
-	@PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) $(LFETOOL) repl lfe +pc unicode -s laotzi-demo
+	@PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) $(LFETOOL) repl lfe +pc unicode
 
 shell: compile
 	@which clear >/dev/null 2>&1 && clear || printf "\033c"
@@ -120,5 +120,5 @@ push-all:
 	git push upstream --tags
 
 install: compile
-	@echo "Installing laotzi-demo ..."
+	@echo "Installing $(PROJECT) ..."
 	@PATH=$(SCRIPT_PATH) lfetool install lfe
