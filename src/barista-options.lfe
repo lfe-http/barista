@@ -60,4 +60,6 @@
        (rename-key 'server-root 'server_root)
        (rename-key 'access-log 'transfer_log)
        (rename-key 'error-log 'error_log)
+       (rename-key 'mime-types 'mime_types)
+       (rename-key 'index-files 'directory_index)
        (rename-key 'nocache 'erl_script_nocache)))
