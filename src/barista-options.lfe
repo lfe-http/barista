@@ -32,16 +32,7 @@
 
 (defun get-defaults ()
   (orddict:from_list
-    `(#(host ,(lcfg:get-in '(barista httpd-conf host)))
-      #(port ,(lcfg:get-in '(barista httpd-conf port)))
-      #(server-name ,(lcfg:get-in '(barista httpd-conf server-name)))
-      #(server-root ,(basedir))
-      #(error-log ,(filename:join (log-dir)
-                                  (lcfg:get-in '(barista httpd-conf error-log))))
-      #(access-log ,(filename:join (log-dir)
-                                   (lcfg:get-in '(barista httpd-conf access-log))))
-      #(docroot ,(docroot))
-      #(ipfamily inet)
+    `(#(ipfamily inet)
       #(modules (mod_alias mod_auth mod_actions mod_dir
                  mod_get mod_head mod_log mod_disk_log barista)))))
 
@@ -49,11 +40,33 @@
   (lutil-type:orddict-merge (get-defaults)
                             options))
 
+(defun get-config ()
+  (orddict:from_list (lcfg:get-in '(barista httpd-conf))))
+
+(defun add-config (options)
+  (lutil-type:orddict-merge (get-config)
+                            options))
+
+(defun get-computed ()
+  (orddict:from_list
+    `(#(server-root ,(basedir))
+      #(error-log ,(filename:join (log-dir)
+                                  (lcfg:get-in '(barista httpd-conf error-log))))
+      #(access-log ,(filename:join (log-dir)
+                                   (lcfg:get-in '(barista httpd-conf access-log))))
+      #(docroot ,(docroot)))))
+
+(defun add-computed (options)
+  (lutil-type:orddict-merge (get-computed)
+                            options))
+
 (defun fixup (options)
   "Let's rename the lmug-standard keys to ones that the OTP httpd module
   expects to see."
-  (->> (orddict:from_list options)
-       (add-defaults)
+  (->> (orddict:from_list options) ; user options override all
+       (add-computed)              ; computed options from the config file are next
+       (add-config)                ; non-computed config items are lesser prio
+       (add-defaults)              ; defaults have the least prio
        (rename-key 'host 'bind_address)
        (rename-key 'docroot 'document_root)
        (rename-key 'server-name 'server_name)
