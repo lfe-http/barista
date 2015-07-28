@@ -62,16 +62,18 @@ Then, from the LFE REPL:
 ```cl
 > (defun handler (request) "Wassup?")
 handler
-> (set `#(ok ,pid) (barista:start-barista #'handler/1))
-#(ok <0.46.0>)
+> (barista:start #'handler/1)
+Starting handler loop ...
+ok
 ```
 
 Or, if you want to start barista on a non-default port (something other than
 1206), you can do this instead:
 
 ```cl
-(barista:start-barista #'handler/1 '(#(port 8000)))
-#(ok <0.46.0>)
+> (barista:start #'handler/1 '(#(port 8000)))
+Starting handler loop ...
+ok
 ```
 
 Then, make a request:
@@ -90,12 +92,13 @@ Content-Length: 9
 Instead of replacing the request data with a string, let's pass the data:
 
 ```cl
-> (barista:stop-barista pid)
+> (barista:stop)
 ok
 > (defun handler (request) request)
 handler
-> (set `#(ok ,pid) (barista:start-barista #'handler/1))
-#(ok <0.56.0>)
+> (barista:start #'handler/1)
+Starting handler loop ...
+ok
 ```
 
 Let's try this one out:

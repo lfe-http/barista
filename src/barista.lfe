@@ -7,33 +7,40 @@
   (export all))
 
 (defun lmug-handler-name () 'lmug-handler)
-(defun barista-httpd-name () 'barista)
 
 (defun setup ()
   (lutil-file:mkdirs (lcfg:get-in '(barista httpd-conf log-dir)))
   (lutil-file:mkdirs (lcfg:get-in '(barista httpd-conf docroot))))
 
 (defun get-config ()
-  (httpd:info (whereis (barista-httpd-name))))
+  (httpd:info (get-httpd)))
 
-(defun start-barista (handler)
-  (start-barista handler '()))
+(defun start (handler)
+  (start handler '()))
 
-(defun start-barista
-  ;; Given a handler which maps request records to response records, pass the
-  ;; response data off to OTP httpd so that it may generate the HTTP server
-  ;; response.
-  ;;
-  ;; This function starts up the handler-loop, passing it the handler function.
-  ;; The spawned handler loop PID is then registered for use with later calls.
-  ((handler options) (when (is_function handler))
-    (inets:start)
-    (setup)
-    (let ((handler-pid (spawn 'barista 'handler-loop `(,handler))))
-      (register (lmug-handler-name) handler-pid))
-    (let ((`#(ok ,httpd-pid) (inets:start 'httpd
-                                          (barista-options:fixup options))))
-      (register (barista-httpd-name) httpd-pid))))
+(defun start (handler options)
+  "Given a handler which maps request records to response records, pass the
+  response data off to OTP httpd so that it may generate the HTTP server
+  response.
+
+  This function starts up the handler-loop, passing it the handler function.
+  The spawned handler loop PID is then registered for use with later calls."
+  (inets:start)
+  (setup)
+  (start-listener handler)
+  (start-httpd options))
+
+(defun start-listener (handler)
+  (case (spawn 'barista 'handler-loop `(,handler))
+    (pid
+     (register (lmug-handler-name) pid))))
+
+(defun start-httpd (options)
+  (case (inets:start 'httpd (barista-options:fixup options))
+    (`#(ok ,pid)
+     'ok)
+    (other
+     other)))
 
 (defun handler-loop (handler-fn)
   "This function is called when a barista server is started. It then listens
@@ -43,7 +50,7 @@
   and the out/1 function for YAWS)."
   (io:format "Starting handler loop ...~n")
   (receive
-    ((tuple sender-pid data)
+    (`#(,sender-pid ,data)
       (! sender-pid `#(handler-output ,(funcall handler-fn data)))
       (handler-loop handler-fn))))
 
@@ -53,7 +60,7 @@
   HTTP server needs to be configured with #(modules (... barista)) at the end.
 
   Note that, in order to call the handler here, we need to set up a 'handler
-  server' when we call the 'start-barista' function. This will allow us to call
+  server' when we call the 'start' function. This will allow us to call
   the configured handler later (i.e., here in the 'do' function).
 
   This function does the following, when it is called (on each HTTP request):
@@ -64,40 +71,32 @@
    * sends a message to the handler loop with converted request data
    * sets up a listener that will be called by the handler loop
    * waits to reveive data from the handler loop (the data which will have been
-     produced by the handler function passed to start-barista/1 or
-     start-barista/2)
+     produced by the handler function passed to start/1 or start/2)
    * converts the passed lmug request data to the format expected by
      Erlang/OTP httpd
   "
-  (let ((handler-pid (whereis (lmug-handler-name))))
-    (! handler-pid (tuple (self) httpd-mod-data))
-    (receive
-      ((tuple 'handler-output data)
-        `#(proceed
-          (#(response
-             #(200 ,(io_lib:format "~p" (list data)))))))
-      ((tuple 'error 'enoent)
-       `#(proceed
-          (#(response
-             #(404 "Not Found")))))
-      (x (io:format "Unexpected result: ~p~n" `(,x))))))
+  (! (lmug-handler-name) `#(,(self) ,httpd-mod-data))
+  (receive
+    (`#(handler-output ,data)
+     `#(proceed
+        (#(response
+           #(200 ,(io_lib:format "~p" (list data)))))))
+    (`#(error enoent)
+     `#(proceed
+        (#(response
+           #(404 "Not Found")))))
+    (x
+     (io:format "Unexpected result: ~p~n" `(,x)))))
 
-(defun stop-barista
-  ((pid) (when (is_pid pid))
-   (inets:stop 'httpd pid)
-   (exit (whereis (lmug-handler-name)) 'ok)
-   'ok)
-  ((options)
-    (stop-barista
-      (get_value 'host options)
-      (get_value 'port options))))
+(defun stop ()
+  (inets:stop 'httpd (get-httpd))
+  (exit (get-handler) 'ok)
+  'ok)
 
-(defun stop-barista
-  (('pid pid)
-    (inets:stop 'httpd pid)
-    (exit (whereis (lmug-handler-name)) 'ok)
-    'ok)
-  ((host port)
-    (inets:stop 'httpd `#(,(host->tuple host) ,port))
-    (exit (whereis (lmug-handler-name)) 'ok)
-    'ok))
+(defun get-handler ()
+  (whereis (lmug-handler-name)))
+
+(defun get-httpd ()
+  (case (lists:keyfind 'httpd 1 (inets:services_info))
+    (`#(httpd ,pid ,_)
+     pid)))
