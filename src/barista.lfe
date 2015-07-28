@@ -7,15 +7,19 @@
   (export all))
 
 (defun lmug-handler-name () 'lmug-handler)
+(defun barista-httpd-name () 'barista)
 
 (defun setup ()
   (lutil-file:mkdirs (lcfg:get-in '(barista httpd-conf log-dir)))
   (lutil-file:mkdirs (lcfg:get-in '(barista httpd-conf docroot))))
 
-(defun run-barista (handler)
-  (run-barista handler '()))
+(defun get-config ()
+  (httpd:info (whereis (barista-httpd-name))))
 
-(defun run-barista
+(defun start-barista (handler)
+  (start-barista handler '()))
+
+(defun start-barista
   ;; Given a handler which maps request records to response records, pass the
   ;; response data off to OTP httpd so that it may generate the HTTP server
   ;; response.
@@ -25,11 +29,11 @@
   ((handler options) (when (is_function handler))
     (inets:start)
     (setup)
-    (let ((pid (spawn 'barista 'handler-loop `(,handler))))
-      (register (lmug-handler-name) pid))
-    (inets:start
-      'httpd
-      (barista-options:fixup options))))
+    (let ((handler-pid (spawn 'barista 'handler-loop `(,handler))))
+      (register (lmug-handler-name) handler-pid))
+    (let ((`#(ok ,httpd-pid) (inets:start 'httpd
+                                          (barista-options:fixup options))))
+      (register (barista-httpd-name) httpd-pid))))
 
 (defun handler-loop (handler-fn)
   "This function is called when a barista server is started. It then listens
@@ -49,8 +53,8 @@
   HTTP server needs to be configured with #(modules (... barista)) at the end.
 
   Note that, in order to call the handler here, we need to set up a 'handler
-  server' when we call the 'run' function. This will allow us to call the
-  configured handler later (i.e., here in the 'do' function).
+  server' when we call the 'start-barista' function. This will allow us to call
+  the configured handler later (i.e., here in the 'do' function).
 
   This function does the following, when it is called (on each HTTP request):
 
@@ -60,7 +64,8 @@
    * sends a message to the handler loop with converted request data
    * sets up a listener that will be called by the handler loop
    * waits to reveive data from the handler loop (the data which will have been
-     produced by the handler function passed to run-barista/1 or run-barista/2)
+     produced by the handler function passed to start-barista/1 or
+     start-barista/2)
    * converts the passed lmug request data to the format expected by
      Erlang/OTP httpd
   "

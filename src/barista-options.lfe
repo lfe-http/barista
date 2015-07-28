@@ -33,7 +33,7 @@
 (defun get-defaults ()
   (orddict:from_list
     `(#(host ,(lcfg:get-in '(barista httpd-conf host)))
-      #(port ,(lcfg:get-in '(barista httpd-conf post)))
+      #(port ,(lcfg:get-in '(barista httpd-conf port)))
       #(server-name ,(lcfg:get-in '(barista httpd-conf server-name)))
       #(server-root ,(basedir))
       #(error-log ,(filename:join (log-dir)
