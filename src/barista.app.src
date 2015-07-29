@@ -5,7 +5,7 @@
   {description, "Hot lmugs of LFE for your simple HTTP needs."},
 
   %% The version of the application
-  {vsn, "0.0.1"},
+  {vsn, "0.0.2"},
 
   %% All modules used by the application.
   {modules,
