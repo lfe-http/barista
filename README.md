@@ -10,6 +10,7 @@
 * [Introduction](#introduction-)
 * [Installation](#installation-)
 * [Usage](#usage-)
+* [License](#license-)
 
 
 ## Introduction [&#x219F;](#contents)
@@ -124,3 +125,10 @@ Content-Length: 277
      [{"accept","*/*"},{"host","localhost:1206"},{"user-agent","curl/7.30.0"}],
      [],true}
 ```
+
+
+## License [&#x219F;](#contents)
+
+Copyright © 2014-2017, Duncan McGreggor
+
+Apache License, Version 2.0
