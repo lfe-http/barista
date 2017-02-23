@@ -5,7 +5,14 @@
 <img src="resources/images/barista.png" />
 
 
-## Introduction
+#### Contents
+
+* [Introduction](#introduction-)
+* [Installation](#installation-)
+* [Usage](#usage-)
+
+
+## Introduction [&#x219F;](#contents)
 
 Barista is a stand-alone, simple HTTP server. Or more accurately, barista
 is LFE code that wraps the Erlang/OTP ``httpd`` HTTP server. It is intended
@@ -25,7 +32,7 @@ be sure to check out the other options:
 * [lmug-cowboy](https://github.com/lfex/lmug-cowboy) (in development)
 
 
-## Installation
+## Installation [&#x219F;](#contents)
 
 Just add it to your ``rebar.config`` deps:
 
@@ -44,7 +51,7 @@ And then do the usual:
 ```
 
 
-## Usage
+## Usage [&#x219F;](#contents)
 
 NOTE: barista by itself isn't very compelling; it's just a convenient LFE
 wrapper around Erlang/OTP's ``httpd``. It's much more meaningful when used
@@ -76,7 +83,7 @@ Starting handler loop ...
 ok
 ```
 
-Then, make a request:
+Then, make a request (assuming you've started with the default port):
 
 ```bash
 $ curl -D- -X GET http://localhost:1206/
