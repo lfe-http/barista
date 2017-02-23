@@ -1,8 +1,14 @@
 # barista
 
-*Barista serves up hot lmugs of LFE for your simple LFE-native HTTP needs.*
+[![Build Status][travis badge]][travis]
+[![LFE Versions][lfe badge]][lfe]
+[![Erlang Versions][erlang badge]][versions]
+[![Tags][github tags badge]][github tags]
+[![Downloads][hex downloads]][hex package]
 
-<img src="resources/images/barista.png" />
+[![][project-logo]][project-logo-large]
+
+*Barista serves up hot lmugs of LFE for your simple LFE-native HTTP needs.*
 
 
 #### Contents
@@ -40,15 +46,14 @@ Just add it to your ``rebar.config`` deps:
 ```erlang
     {deps, [
         ...
-        {barista, ".*", {git, "git@github.com:lfex/barista.git", "master"}}
+        {barista, {git, "git@github.com:lfe-mug/barista.git", "master"}}
       ]}.
 ```
 
 And then do the usual:
 
 ```bash
-    $ rebar get-deps
-    $ rebar compile
+    $ rebar3 compile
 ```
 
 
@@ -132,3 +137,24 @@ Content-Length: 277
 Copyright © 2014-2017, Duncan McGreggor
 
 Apache License, Version 2.0
+
+
+<!-- Named page links below: /-->
+
+[project-logo]: resources/images/barista.png
+[project-logo-large]: resources/images/barista.png
+[org]: https://github.com/lfex
+[github]: https://github.com/lfe-mug/barista
+[gitlab]: https://gitlab.com/lfe-mug/barista
+[travis]: https://travis-ci.org/lfe-mug/barista
+[travis badge]: https://img.shields.io/travis/lfe-mug/barista.svg
+[lfe]: https://github.com/rvirding/lfe
+[lfe badge]: https://img.shields.io/badge/lfe-1.2+-blue.svg
+[erlang badge]: https://img.shields.io/badge/erlang-18+-blue.svg
+[versions]: https://github.com/lfe-mug/barista/blob/master/.travis.yml
+[github tags]: https://github.com/lfe-mug/barista/tags
+[github tags badge]: https://img.shields.io/github/tag/lfe-mug/barista.svg
+[github downloads]: https://img.shields.io/github/downloads/lfe-mug/barista/total.svg
+[hex badge]: https://img.shields.io/hexpm/v/barista.svg
+[hex package]: https://hex.pm/packages/barista
+[hex downloads]: https://img.shields.io/hexpm/dt/barista.svg
