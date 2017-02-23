@@ -7,8 +7,6 @@
       (rename-key 3)))
   (export all))
 
-(include-lib "clj/include/compose.lfe")
-
 (defun get-cwd ()
   (case (file:get_cwd)
     (`#(ok ,dir) dir)
@@ -63,16 +61,16 @@
 (defun fixup (options)
   "Let's rename the lmug-standard keys to ones that the OTP httpd module
   expects to see."
-  (->> (orddict:from_list options) ; user options override all
-       (add-computed)              ; computed options from the config file are next
-       (add-config)                ; non-computed config items are lesser prio
-       (add-defaults)              ; defaults have the least prio
-       (rename-key 'host 'bind_address)
-       (rename-key 'docroot 'document_root)
-       (rename-key 'server-name 'server_name)
-       (rename-key 'server-root 'server_root)
-       (rename-key 'access-log 'transfer_log)
-       (rename-key 'error-log 'error_log)
-       (rename-key 'mime-types 'mime_types)
-       (rename-key 'index-files 'directory_index)
-       (rename-key 'nocache 'erl_script_nocache)))
+  (clj:->> (orddict:from_list options) ; user options override all
+           (add-computed)              ; computed options from the config file are next
+           (add-config)                ; non-computed config items are lesser prio
+           (add-defaults)              ; defaults have the least prio
+           (rename-key 'host 'bind_address)
+           (rename-key 'docroot 'document_root)
+           (rename-key 'server-name 'server_name)
+           (rename-key 'server-root 'server_root)
+           (rename-key 'access-log 'transfer_log)
+           (rename-key 'error-log 'error_log)
+           (rename-key 'mime-types 'mime_types)
+           (rename-key 'index-files 'directory_index)
+           (rename-key 'nocache 'erl_script_nocache)))
