@@ -1,11 +1,17 @@
 language: erlang
-script: "make check-travis"
+install: true
+before_script:
+  - wget https://s3.amazonaws.com/rebar3/rebar3
+  - chmod +x rebar3
+env:
+  - PATH=".:$PATH"
+script:
+  - ./rebar3 as dev compile
+  - ./rebar3 as test eunit
 notifications:
-  #irc: "irc.freenode.org#YOUR-PROJECT-CHANNEL"
   recipients:
-    #- YOU@YOUR.DOMAIN
+    - oubiwann@gmail.com
 otp_release:
-  - R16B03
-  - R15B03
-  # The following isn't yet supported
-  #- 17.0
+  - 19.2
+  - 18.3
+  - 17.5
