@@ -51,7 +51,6 @@
   the barista server was started) and sends the results of that call to the
   function that called the loop (e.g., the do/1 function for barista/httpd,
   and the out/1 function for YAWS)."
-  (io:format "Starting handler loop ...~n")
   (receive
     (`#(,sender-pid ,data)
       (! sender-pid `#(handler-output ,(funcall handler-fn data)))
