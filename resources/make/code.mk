@@ -9,7 +9,7 @@ repl:
 	@$(LFE) -pa `rebar3 as dev path -s " -pa "`
 
 shell:
-	@rebar3 shell
+	@rebar3 as dev shell
 
 clean:
 	@rebar3 clean
