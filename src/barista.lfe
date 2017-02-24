@@ -15,6 +15,9 @@
 (defun get-config ()
   (httpd:info (get-httpd)))
 
+(defun start ()
+  (start (lambda (request) request) '()))
+
 (defun start (handler)
   (start handler '()))
 
