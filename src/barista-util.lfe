@@ -1,9 +1,33 @@
 (defmodule barista-util
   (export all))
 
-(defun get-barista-version ()
-  (lutil:get-app-src-version "src/barista.app.src"))
+(defun version ()
+  (version 'barista))
 
-(defun get-version ()
-  (++ (lutil:get-version)
-      `(#(barista ,(get-barista-version)))))
+(defun version (app-name)
+  (application:load app-name)
+  (case (application:get_key app-name 'vsn)
+    (`#(ok ,vsn) vsn)
+    (default default)))
+
+(defun version-arch ()
+  `#(architecture ,(erlang:system_info 'system_architecture)))
+
+(defun version+name (app-name)
+  `#(,app-name ,(version app-name)))
+
+(defun versions-rebar ()
+  `(,(version+name 'rebar)
+    ,(version+name 'rebar3_lfe)))
+
+(defun versions-langs ()
+  `(,(version+name 'lfe)
+    #(erlang ,(erlang:system_info 'otp_release))
+    #(emulator ,(erlang:system_info 'version))
+    #(driver ,(erlang:system_info 'driver_version))))
+
+(defun versions ()
+  (lists:append `((,(version+name 'barista))
+                  ,(versions-langs)
+                  ,(versions-rebar)
+                  (,(version-arch)))))

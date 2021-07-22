@@ -17,7 +17,6 @@
   {licenses, ["Apache-2"]},
   {links,
    [{"GitHub", "https://github.com/lfex/barista"},
-    {"Gitlab", "https://gitlab.com/lfex/barista"},
     {"Hex", "https://hex.pm/packages/barista"}
    ]}
 ]}.
