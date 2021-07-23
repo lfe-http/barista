@@ -18,5 +18,6 @@
   {links,
    [{"GitHub", "https://github.com/lfex/barista"},
     {"Hex", "https://hex.pm/packages/barista"}
-   ]}
+   ]},
+  {exclude_files, ["priv/*"]}
 ]}.
