@@ -116,7 +116,7 @@ Apache License, Version 2.0
 [org]: https://github.com/lfex
 [github]: https://github.com/lfex/barista
 [gh-actions-badge]: https://github.com/lfex/barista/workflows/ci%2Fcd/badge.svg
-[gh-actions]: https://github.com/lfex/loise/actions
+[gh-actions]: https://github.com/lfex/barista/actions
 [lfe]: https://github.com/lfe/lfe
 [lfe badge]: https://img.shields.io/badge/lfe-2.0-blue.svg
 [erlang badge]: https://img.shields.io/badge/erlang-21%20to%2024-blue.svg
