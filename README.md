@@ -58,7 +58,16 @@ lfe> (set `#(ok ,svr) (barista:start))
 This will start an HTTP server with the default barista options. You can use `curl` to try it out:
 
 ``` bash
+curl "http://localhost:5099/"
+```
 
+or
+
+``` bash
+curl -XPOST \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "c=3&d=42" \
+     "http://localhost:5099/order?a=1&b=2"
 ```
 
 You can override the default options like so:
