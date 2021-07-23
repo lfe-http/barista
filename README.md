@@ -1,6 +1,6 @@
 # barista
 
-[![Build Status][travis badge]][travis]
+[![Build Status][gh-actions-badge]][gh-actions]
 [![LFE Versions][lfe badge]][lfe]
 [![Erlang Versions][erlang badge]][versions]
 [![Tags][github tags badge]][github tags]
@@ -16,6 +16,7 @@
 * [Introduction](#introduction-)
 * [Installation](#installation-)
 * [Usage](#usage-)
+* [Creating Custom Modules](#creating-custom-modules-)
 * [License](#license-)
 
 
@@ -23,21 +24,7 @@
 
 Barista is a stand-alone, simple HTTP server. Or more accurately, barista
 is LFE code that wraps the Erlang/OTP ``httpd`` HTTP server. It is intended
-for a couple of simple uses:
-
-* development and demo purposes
-* quickly and easily testing of lmug middleware
-
-This is the first HTTP server which supports the
-[lmug Spec](https://github.com/lfex/lmug/blob/master/doc/SPEC.md) for creating
-HTTP middleware (and lmug-compliant HTTP servers) in Erlang/LFE.
-
-If you would like to use a production-ready HTTP server with lmug middleware,
-be sure to check out the other options:
-
-* [lmug-yaws](https://github.com/lfex/lmug-yaws) (in development)
-* [lmug-cowboy](https://github.com/lfex/lmug-cowboy) (in development)
-
+for development/demo purposes and non-critical services.
 
 ## Installation [&#x219F;](#contents)
 
@@ -45,9 +32,8 @@ Just add it to your ``rebar.config`` deps:
 
 ```erlang
     {deps, [
-        ...
-        {barista, {git, "git@github.com:lfe-mug/barista.git", "master"}}
-      ]}.
+        {barista, "0.3.0"}
+    ]}.
 ```
 
 And then do the usual:
@@ -59,102 +45,85 @@ And then do the usual:
 
 ## Usage [&#x219F;](#contents)
 
-NOTE: barista by itself isn't very compelling; it's just a convenient LFE
-wrapper around Erlang/OTP's ``httpd``. It's much more meaningful when used
-as part of lmug.
 
-As such, keep in mind that the following usage is "toy"; see the
-[lmug](https://github.com/lfex/lmug) project for more interesting use cases.
+To try out the default no-op/pass-through handler, you can do this (after `rebar3 compile`):
 
 ```bash
-$ make repl
+$ rebar3 lfe repl
 ```
-
-Then, from the LFE REPL:
-
 ```cl
-> (defun handler (request) "Wassup?")
-handler
-> (barista:start #'handler/1)
-Starting handler loop ...
-ok
+lfe> (set `#(ok ,svr) (barista:start))
 ```
 
-Or, if you want to start barista on a non-default port (something other than
-1206), you can do this instead:
+This will start an HTTP server with the default barista options. You can use `curl` to try it out:
 
-```cl
-> (barista:start #'handler/1 '(#(port 8000)))
-Starting handler loop ...
-ok
+``` bash
+
 ```
 
-Then, make a request (assuming you've started with the default port):
+You can override the default options like so:
 
-```bash
-$ curl -D- -X GET http://localhost:1206/
-HTTP/1.1 200 OK
-Server: inets/5.10
-Content-Type: text/html
-Date: Tue, 26 Aug 2014 04:02:57 GMT
-Content-Length: 9
-
-"Wassup?"
+``` cl
+lfe> (set `#(ok ,svr) (barista:start '(#(port 9099))))
 ```
 
-Instead of replacing the request data with a string, let's pass the data:
+Additionally, you can provide a config file that may be used to provide options for starting up
+barista (which is really the inets httpd service):
 
-```cl
-> (barista:stop)
-ok
-> (defun handler (request) request)
-handler
-> (barista:start #'handler/1)
-Starting handler loop ...
-ok
+``` cl
+lfe> (set `#(ok ,svr) (barista:start '(#(config-file "configs/sys.config"))))
 ```
 
-Let's try this one out:
+That expects the inets httpd configuration to be in a nested proplist under the following:
 
-```bash
-$ curl -D- -X PUT http://localhost:1206/a/b/c
-HTTP/1.1 200 OK
-Server: inets/5.10
-Content-Type: text/html
-Date: Tue, 26 Aug 2014 03:59:47 GMT
-Content-Length: 277
-
-{mod,{init_data,{51709,"127.0.0.1"},"korax-4"},
-     [],ip_comm,#Port<0.3331>,httpd_conf__127_0_0_1__1206,"PUT",
-     "localhost:1206/a/b/c","/a/b/c","HTTP/1.1","PUT /a/b/c HTTP/1.1",
-     [{"accept","*/*"},{"host","localhost:1206"},{"user-agent","curl/7.30.0"}],
-     [],true}
+``` erlang
+[{inets,
+ [{services,
+  [{httpd, ... }]}]}].
 ```
 
+If your configuration is in a different part of the configuration, you just need to supply a list
+of the keys that point to it, e.g.:
+
+``` cl
+lfe> (set `#(ok ,svr) (barista:start '(#(config-file "configs/sys.config")
+                                       #(config-keys (my-app httpd)))))
+```
+
+Finally, to stop barista:
+
+``` cl
+lfe> (barista:stop svr)
+```
+
+## Creating Custom Modules [&#x219F;](#contents)
+
+The Erlang inets httpd server supports the creation of modules (see [the documentation](http://erlang.org/doc/apps/inets/http_server.html#inets-web-server-modules) for the various `mod_*` httpd modules). The example module `barista-passthrough` implements the httpd module contract: a single `do/1` function is all that is needed. The argument it takes is the inets httpd request record `mod` found in `inets/include/httpd.hrl`.
+
+In addition to this, the `barista-passthrough` defines a `handle/3` function very much in line with the sort of thing that [Elli](https://github.com/elli-lib/elli) developers do when creating routes for their web applications.
 
 ## License [&#x219F;](#contents)
 
-Copyright © 2014-2017, Duncan McGreggor
+Copyright © 2014-2021, Duncan McGreggor
 
 Apache License, Version 2.0
 
 
-<!-- Named page links below: /-->
+[//]: ---Named-Links---
 
-[project-logo]: resources/images/barista.png
-[project-logo-large]: resources/images/barista.png
+[project-logo]: priv/images/barista.png
+[project-logo-large]: priv/images/barista.png
 [org]: https://github.com/lfex
-[github]: https://github.com/lfe-mug/barista
-[gitlab]: https://gitlab.com/lfe-mug/barista
-[travis]: https://travis-ci.org/lfe-mug/barista
-[travis badge]: https://img.shields.io/travis/lfe-mug/barista.svg
-[lfe]: https://github.com/rvirding/lfe
-[lfe badge]: https://img.shields.io/badge/lfe-1.2+-blue.svg
-[erlang badge]: https://img.shields.io/badge/erlang-18+-blue.svg
-[versions]: https://github.com/lfe-mug/barista/blob/master/.travis.yml
-[github tags]: https://github.com/lfe-mug/barista/tags
-[github tags badge]: https://img.shields.io/github/tag/lfe-mug/barista.svg
-[github downloads]: https://img.shields.io/github/downloads/lfe-mug/barista/total.svg
+[github]: https://github.com/lfex/barista
+[gh-actions-badge]: https://github.com/lfex/barista/workflows/ci%2Fcd/badge.svg
+[gh-actions]: https://github.com/lfex/loise/actions
+[lfe]: https://github.com/lfe/lfe
+[lfe badge]: https://img.shields.io/badge/lfe-2.0-blue.svg
+[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2024-blue.svg
+[versions]: https://github.com/lfex/barista/blob/master/.github/workflows/cicd.yml
+[github tags]: https://github.com/lfex/barista/tags
+[github tags badge]: https://img.shields.io/github/tag/lfex/barista.svg
+[github downloads]: https://img.shields.io/github/downloads/lfex/barista/total.svg
 [hex badge]: https://img.shields.io/hexpm/v/barista.svg
 [hex package]: https://hex.pm/packages/barista
 [hex downloads]: https://img.shields.io/hexpm/dt/barista.svg
