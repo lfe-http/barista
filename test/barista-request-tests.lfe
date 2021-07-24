@@ -1,4 +1,4 @@
-(defmodule barista-tests
+(defmodule barista-request-tests
   (behaviour ltest-unit)
   (export all))
 
