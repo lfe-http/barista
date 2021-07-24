@@ -21,4 +21,4 @@
           (body "hej!\r\n"))
      (lfe_io:format "headers: ~p~n" `(,headers))
      (lfe_io:format "body: ~p~n~n" `(,body))
-     (barista-resposne:proceed 200 headers body))))
+     (barista-response:proceed 200 headers body))))
