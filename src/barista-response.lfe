@@ -9,8 +9,8 @@
 
 (defun response (status headers body)
   `#(proceed
-     #(response
-       #(,status ,(string:join (++ headers (list body)) "\r\n")))))
+     (#(response
+        #(,status ,(string:join (++ headers (list body)) "\r\n"))))))
 
 (defun accepted ()
   (accepted "Accepted"))
@@ -37,7 +37,7 @@
   (response 405 body))
 
 (defun no-content ()
-  (no-content "No Content"))
+  (no-content ""))
 
 (defun no-content (body)
   (response 204 body))
