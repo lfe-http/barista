@@ -31,9 +31,9 @@
         ('undefined '())
         (opts opts)))))
 
-(defun response (body) (barista-resposne:response body))
-(defun response (status body) (barista-resposne:response status body))
-(defun response (status headers body) (barista-resposne:response status headers body))
+(defun response (body) (barista-response:response body))
+(defun response (status body) (barista-response:response status body))
+(defun response (status headers body) (barista-response:response status headers body))
 
 (defun start ()
   (start '()))
