@@ -22,7 +22,7 @@
        socket-type ,st
        socket ,s
        config-db ,cdb
-       method ,m
+       method ,(list_to_atom m)
        absolute-uri ,au
        request-uri ,ru
        http-versions ,hv
