@@ -4,10 +4,6 @@
 
 (include-lib "ltest/include/ltest-macros.lfe")
 
-(deftest proceed
-  (is-equal #(proceed (#(response #(200 "OK"))))
-            (barista-response:proceed 200 '() "OK")))
-
 (deftest response-1
   (is-equal #(proceed #(response #(200 "OK")))
             (barista-response:response "OK")))
