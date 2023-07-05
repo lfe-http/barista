@@ -10,7 +10,6 @@
 
 *Barista serves up hot lmugs of LFE for your simple LFE-native HTTP needs.*
 
-
 #### Contents
 
 * [Introduction](#introduction-)
@@ -18,7 +17,6 @@
 * [Usage](#usage-)
 * [Creating Custom Modules](#creating-custom-modules-)
 * [License](#license-)
-
 
 ## Introduction [&#x219F;](#contents)
 
@@ -39,18 +37,17 @@ Just add it to your ``rebar.config`` deps:
 And then do the usual:
 
 ```bash
-    $ rebar3 compile
+    rebar3 compile
 ```
 
-
 ## Usage [&#x219F;](#contents)
-
 
 To try out the default no-op/pass-through handler, you can do this (after `rebar3 compile`):
 
 ```bash
-$ rebar3 lfe repl
+rebar3 lfe repl
 ```
+
 ```cl
 lfe> (set `#(ok ,svr) (barista:start))
 ```
@@ -117,22 +114,17 @@ Copyright © 2014-2021, Duncan McGreggor
 
 Apache License, Version 2.0
 
-
 [//]: ---Named-Links---
 
 [project-logo]: priv/images/barista.png
 [project-logo-large]: priv/images/barista.png
-[org]: https://github.com/lfex
-[github]: https://github.com/lfex/barista
 [gh-actions-badge]: https://github.com/lfex/barista/workflows/ci%2Fcd/badge.svg
 [gh-actions]: https://github.com/lfex/barista/actions
 [lfe]: https://github.com/lfe/lfe
-[lfe badge]: https://img.shields.io/badge/lfe-2.0-blue.svg
-[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2024-blue.svg
+[lfe badge]: https://img.shields.io/badge/lfe-2.1-blue.svg
+[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2025-blue.svg
 [versions]: https://github.com/lfex/barista/blob/master/.github/workflows/cicd.yml
 [github tags]: https://github.com/lfex/barista/tags
 [github tags badge]: https://img.shields.io/github/tag/lfex/barista.svg
-[github downloads]: https://img.shields.io/github/downloads/lfex/barista/total.svg
-[hex badge]: https://img.shields.io/hexpm/v/barista.svg
 [hex package]: https://hex.pm/packages/barista
 [hex downloads]: https://img.shields.io/hexpm/dt/barista.svg
