@@ -34,11 +34,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun parse-query (query)
-  (maps:from_list (uri_string:dissect_query query)))
-
 (defun parse-body
   (("application/x-www-form-urlencoded" body)
-   (parse-query body))
+   (yuri.query:parse body))
   ((_ body)
    body))
