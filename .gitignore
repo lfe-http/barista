@@ -21,3 +21,4 @@ tramp
 /test/*.png
 scratch.lfe
 /_checkouts
+/rebar.lock
