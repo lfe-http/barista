@@ -1,6 +1,6 @@
 {application, barista,
  [{description, "Hot lmugs of LFE for your simple HTTP needs"},
-  {vsn, "0.3.0"},
+  {vsn, "0.3.1"},
   {modules,
    [barista,
     'barista-lmug',
