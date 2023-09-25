@@ -30,7 +30,7 @@ Just add it to your ``rebar.config`` deps:
 
 ```erlang
     {deps, [
-        {barista, "0.3.0"}
+        {barista, "0.3.3"}
     ]}.
 ```
 
