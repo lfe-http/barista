@@ -1,10 +1,10 @@
-(defmodule barista-util
+(defmodule barista-vsn
   (export all))
 
-(defun version ()
-  (version 'barista))
+(defun get ()
+  (barista-vsn:get 'barista))
 
-(defun version (app-name)
+(defun get (app-name)
   (application:load app-name)
   (case (application:get_key app-name 'vsn)
     (`#(ok ,vsn) vsn)
@@ -14,7 +14,7 @@
   `#(architecture ,(erlang:system_info 'system_architecture)))
 
 (defun version+name (app-name)
-  `#(,app-name ,(version app-name)))
+  `#(,app-name ,(barista-vsn:get app-name)))
 
 (defun versions-rebar ()
   `(,(version+name 'rebar)
@@ -26,7 +26,7 @@
     #(emulator ,(erlang:system_info 'version))
     #(driver ,(erlang:system_info 'driver_version))))
 
-(defun versions ()
+(defun all ()
   (lists:append `((,(version+name 'barista))
                   ,(versions-langs)
                   ,(versions-rebar)

@@ -2,18 +2,17 @@
   (export
    (default-options 0)
    (read-config 1)
-   (response 1) (response 2) (response 3)
    (start 0) (start 1)
-   (stop 1)))
+   (stop 0)
+   (version 0)))
 
 (include-lib "kernel/include/logger.hrl")
 
 (defun default-options ()
   '(#(port 5099)
-    #(server_name "barista-passthrough")
+    #(server_name "barista")
     #(document_root ".")
-    #(server_root ".")
-    #(modules (barista-passthrough))))
+    #(server_root ".")))
 
 (defun read-config (config-file)
   "Read a standard release-style system config file.
@@ -31,17 +30,25 @@
         ('undefined '())
         (opts opts)))))
 
-(defun response (body) (barista-response:response body))
-(defun response (status body) (barista-response:response status body))
-(defun response (status headers body) (barista-response:response status headers body))
+(defun app ()
+  (clj:-> (lmug:app)
+          (lmug-mw-identity:wrap)
+          (lmug-mw-request-id:wrap)
+          (lmug-mw-content-type:wrap)
+          (lmug-mw-status-body:wrap)))
 
 (defun start ()
   (start '()))
 
 (defun start (overrides)
-  (let* ((opts (++ overrides (get-opts overrides))))
-    (LOG_DEBUG "httpd options: ~p~n" (list opts))
-    (inets:start 'httpd opts)))
+  (let ((inets-opts (++ overrides (get-opts overrides))))
+    (lmug-inets:start (app) inets-opts)))
 
-(defun stop (pid)
-  (inets:stop 'httpd pid))
+(defun stop ()
+  (lmug-inets:stop))
+
+(defun version ()
+  (barista-vsn:get))
+
+(defun versions ()
+  (barista-vsn:all))

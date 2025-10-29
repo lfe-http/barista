@@ -1,12 +1,11 @@
 # barista
 
 [![Build Status][gh-actions-badge]][gh-actions]
-[![LFE Versions][lfe badge]][lfe]
-[![Erlang Versions][erlang badge]][versions]
-[![Tags][github tags badge]][github tags]
-[![Downloads][hex downloads]][hex package]
+[![LFE Versions][lfe-badge]][lfe]
+[![Erlang Versions][erlang-badge]][version]
+[![Tags][github-tags-badge]][github-tags]
 
-[![][project-logo]][project-logo-large]
+[![Project Logo][logo]][logo-large]
 
 *Barista serves up hot lmugs of LFE for your simple LFE-native HTTP needs.*
 
@@ -116,15 +115,13 @@ Apache License, Version 2.0
 
 [//]: ---Named-Links---
 
-[project-logo]: priv/images/barista.png
-[project-logo-large]: priv/images/barista.png
-[gh-actions-badge]: https://github.com/lfex/barista/workflows/ci%2Fcd/badge.svg
-[gh-actions]: https://github.com/lfex/barista/actions
+[logo]: priv/images/barista.png
+[logo-large]: priv/images/barista.png
+[gh-actions-badge]: https://github.com/lfe-http/barista/actions/workflows/cicd.yml/badge.svg
+[gh-actions]: https://github.com/lfe-http/barista/actions
 [lfe]: https://github.com/lfe/lfe
-[lfe badge]: https://img.shields.io/badge/lfe-2.1-blue.svg
-[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2025-blue.svg
-[versions]: https://github.com/lfex/barista/blob/master/.github/workflows/cicd.yml
-[github tags]: https://github.com/lfex/barista/tags
-[github tags badge]: https://img.shields.io/github/tag/lfex/barista.svg
-[hex package]: https://hex.pm/packages/barista
-[hex downloads]: https://img.shields.io/hexpm/dt/barista.svg
+[lfe-badge]: https://img.shields.io/badge/lfe-2.2-blue.svg
+[erlang-badge]: https://img.shields.io/badge/erlang-24%20to%2028-blue.svg
+[version]: https://github.com/lfe-http/barista/blob/master/.github/workflows/cicd.yml
+[github-tags]: https://github.com/lfe-http/barista/tags
+[github-tags-badge]: https://img.shields.io/github/tag/lfe-http/barista.svg
