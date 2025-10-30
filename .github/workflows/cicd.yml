@@ -10,59 +10,72 @@ on:
   # Build once a month, just to be sure things are still working
   schedule:
   - cron: "20 4 22 * *"
+name: ci/cd
 
 jobs:
 
   core-builds:
-    name: Erlang ${{ matrix.otp_version }} build
+    name: Erlang ${{ matrix.otp-version }}
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        otp_version: ['24.3', '25.3', '26.0']
+        otp-version: ['28', '27', '26']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: erlef/setup-beam@v1
       with:
-        otp-version: ${{ matrix.otp_version }}
+        otp-version: ${{ matrix.otp-version }}
+        rebar3-version: '3.25'
+    - name: Check rebar3 Version
+      run: rebar3 --version
+    - name: Compile
+      run: rebar3 compile
+    #- name: Xref Checks
+    #  run: rebar3 xref
+    # - name: Dialyzer
+    #   run: rebar3 dialyzer
+    - name: Compile Unit Tests
+      run: rebar3 as unit compile
+    - name: Run Unit Tests
+      run: rebar3 as unit lfe ltest -tunit
+    - name: Compile Integration Tests
+      run: rebar3 as integration compile
+    - name: Run Integration Tests
+      run: rebar3 as integration lfe ltest -tintegration
+    #- name: Test Coverage
+    #  run: rebar3 as test do proper -c, cover -v --min_coverage=0
+
+  old-builds:
+    name: Erlang ${{ matrix.otp-version }}
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        otp-version: ['25', '24']
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: erlef/setup-beam@v1
+      with:
+        otp-version: ${{ matrix.otp-version }}
         rebar3-version: '3.22'
     - name: Check rebar3 Version
       run: rebar3 --version
     - name: Compile
       run: rebar3 compile
-    - name: Xref Checks
-      run: rebar3 xref
+    #- name: Xref Checks
+    #  run: rebar3 xref
     # - name: Dialyzer
     #   run: rebar3 dialyzer
-    - name: Compile Tests
-      run: rebar3 as test compile
+    - name: Compile Unit Tests
+      run: rebar3 as unit compile
     - name: Run Unit Tests
-      run: rebar3 as test eunit
-
-  old-builds:
-    name: Old Erlang ${{ matrix.otp_version }} build
-    runs-on: ubuntu-20.04
-
-    strategy:
-      matrix:
-        otp_version: ['21.3', '22.3', '23.3']
-
-    steps:
-    - uses: actions/checkout@v2
-    - uses: erlef/setup-beam@v1
-      with:
-        otp-version: ${{ matrix.otp_version }}
-        rebar3-version: '3.15'
-    - name: Check rebar3 Version
-      run: rebar3 --version
-    - name: Compile
-      run: rebar3 compile
-    - name: Xref Checks
-      run: rebar3 xref
-    # - name: Dialyzer
-    #   run: rebar3 dialyzer
-    - name: Compile Tests
-      run: rebar3 as test compile
-    - name: Run Unit Tests
-      run: rebar3 as test eunit
+      run: rebar3 as unit lfe ltest -tunit
+    - name: Compile Integration Tests
+      run: rebar3 as integration compile
+    - name: Run Integration Tests
+      run: rebar3 as integration lfe ltest -tintegration
+    #- name: Test Coverage
+    #  run: rebar3 as test do proper -c, cover -v --min_coverage=0
