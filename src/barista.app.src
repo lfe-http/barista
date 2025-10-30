@@ -3,9 +3,9 @@
   {vsn, "0.4.0"},
   {modules,
    [barista,
-    'barista-lmug',
-    'barista-options',
-    'barista-util']},
+    'barista-cfg',
+    'barista-vsn',
+    'barista']},
   {registered, []},
   {applications,[kernel,stdlib,inets]},
   {included_applications, []},
@@ -19,5 +19,8 @@
    [{"GitHub", "https://github.com/lfex/barista"},
     {"Hex", "https://hex.pm/packages/barista"}
    ]},
-  {exclude_files, ["priv/*"]}
+  {exclude_files, [
+    "priv/images/*",
+    "priv/make/*"
+  ]}
 ]}.

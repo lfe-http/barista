@@ -5,8 +5,7 @@ check:
 	rebar3 as test lfe test -t unit
 
 repl:
-	@rebar3 as dev compile
-	@$(LFE) -pa `rebar3 as dev path -s " -pa "`
+	@ERL_AFLAGS=$$'-prompt \'\033[1;32mlfe\033[0m\033[33m>\033[0m \'' rebar3 lfe repl
 
 shell:
 	@rebar3 as dev shell
